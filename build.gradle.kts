@@ -1,19 +1,19 @@
 plugins {
-  alias(libs.plugins.android.library)
-  alias(libs.plugins.kotlin.android)
+  id("com.android.library") version "8.4.0"
+  id("org.jetbrains.kotlin.android") version "1.9.23"
   `maven-publish`
 }
 
 group = "dev.trindadedev"
-version = libs.versions.lib.version.get()
+version = "1.0.0"
 
 android {
   namespace = "dev.trindadedev.c2bsh"
-  compileSdk = libs.versions.android.compileSdk.get().toInt()
-  buildToolsVersion = libs.versions.android.buildToolsVersion.get()
+  compileSdk = 34
+  buildToolsVersion = "34.0.0"
 
   defaultConfig {
-    minSdk = libs.versions.android.minSdk.get().toInt()
+    minSdk = 21
 
     ndk {
       abiFilters += listOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
@@ -49,7 +49,7 @@ afterEvaluate {
       register("mavenRelease", MavenPublication::class) {
         groupId = "dev.trindadedev"
         artifactId = "c2bsh"
-        version = libs.versions.lib.version.get()
+        version = "1.0.0"
         from(components["release"])
       }
     }

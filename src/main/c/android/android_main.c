@@ -12,7 +12,7 @@
 JNIEXPORT jlong JNICALL
 Java_dev_trindadedev_c2bsh_C2BSH_convert
   (JNIEnv* env, jobject, jstring j_c_code) {
-  char* c_code = (*env)->GetStringUTFChars(env, j_c_code, nullptr);
+  const char* c_code = (*env)->GetStringUTFChars(env, j_c_code, nullptr);
   c2bsh_converter_result* result_ptr = c2bsh_converter_convert(c_code);
   return (jlong) result_ptr;
 }
