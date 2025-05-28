@@ -16,7 +16,7 @@ fi
 rm -rf build
 mkdir build && cd build
 
-cmake ../
+cmake cmake -DC2BSH_ANDROID=OFF ..
 make
 
 if [ "$1" = "run" ]; then

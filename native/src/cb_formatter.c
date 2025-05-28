@@ -4,16 +4,19 @@
  * in 2025-04-12
  */
 
+#include "cb_formatter.h"
+
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
 #include <string.h>
-#include "formatter.h"
-#include "log.h"
+
+#include "cb_bool.h"
+#include "cb_log.h"
+#include "cb_string.h"
 
 // Adds indentation to the buffer based on the indentation level
-void formatter_append_indent(char* buffer, int* pos, int indent_level) {
+void formatter_append_indent(cb_string buffer, int* pos, int indent_level) {
   for (int i = 0; i < indent_level; i++) {
     if (*pos < 100000) {
       buffer[(*pos)++] = ' ';
@@ -23,20 +26,22 @@ void formatter_append_indent(char* buffer, int* pos, int indent_level) {
 }
 
 // Formatts the code and returns it
-char* formatter_format(char* code, size_t buffer_size, bool indent_multiline_comments) {
+cb_string formatter_format(cb_string code,
+                           size_t buffer_size,
+                           cb_bool indent_multiline_comments) {
   int open_braces = 0;
   bool processing_single_line_comment = false;
   bool processing_multi_line_comment = false;
   bool processing_escape = false;
   bool processing_char = false;
   bool processing_string = false;
-  char* formatted_code = malloc(buffer_size);
+  cb_string formatted_code = malloc(buffer_size);
   if (!formatted_code) {
     log_error("Failed to allocate memory for formatted_code");
     return NULL;
   }
   int pos = 0;
-  //formatter_append_indent(formatted_code, &pos, 1);
+  // formatter_append_indent(formatted_code, &pos, 1);
   for (size_t i = 0; code[i] != '\0'; i++) {
     char ch = code[i];
     if (processing_single_line_comment) {
@@ -99,7 +104,8 @@ char* formatter_format(char* code, size_t buffer_size, bool indent_multiline_com
           formatter_append_indent(formatted_code, &pos, open_braces);
         } else if (ch == '}') {
           formatted_code[pos++] = '\n';
-          if (open_braces > 0) open_braces--;
+          if (open_braces > 0)
+            open_braces--;
           formatter_append_indent(formatted_code, &pos, open_braces);
           formatted_code[pos++] = ch;
           formatted_code[pos++] = '\n';
